@@ -1,0 +1,34 @@
+[1;34m[ml4][0m Loaded config from /scratch/user/uqjcarr1/builds/AMD_MI355X_Bunya_LLM_tools_mistral-large-4-1T-A52B/ml4.env
+[1;34m[ml4][0m Weights: mxfp4 — /scratch/opendata/models/huggingface/amd-Mistral-Large-4-1T-A52B-Quark-MXFP4
+[1;34m[ml4][0m GPUs: 8 x gfx950 (detected gfx950); ROCm node 10.1.0 / container torch 2.13.0+rocm10.0.0 HIP 7.15.26333
+[1;34m[ml4][0m Generated LiteLLM master key -> /scratch/user/uqjcarr1/models/mistral-large-4/ml4-litellm-key
+[1;34m[ml4][0m Recipe: arch=mi355x engine=day0 weights=mxfp4 tp=4 replicas=2 mono=1 spec=dspark(3) kv=fp8 ctx=262144 max-seqs=16 gateway=litellm
+[1;34m[ml4][0m GPU passthrough: rocm (remembered for this node + image)
+[1;34m[ml4][0m Replica 0: GPUs 0,1,2,3 -> 127.0.0.1:8101   log: /scratch/user/uqjcarr1/models/mistral-large-4/logs/ml4-r0.log
+[1;34m[ml4][0m Replica 1: GPUs 4,5,6,7 -> 127.0.0.1:8102   log: /scratch/user/uqjcarr1/models/mistral-large-4/logs/ml4-r1.log
+[1;34m[ml4][0m Waiting for the engine(s) (timeout 7200s). Cold start: weights, aiter/FlyDSL JIT, graph capture.
+[1;34m[ml4][0m Replica 0 healthy after 490s.
+[1;34m[ml4][0m Replica 1 healthy after 490s.
+[1;34m[ml4][0m LiteLLM gateway up on :8000 -> 2 replica(s), routing least-busy.
+
+============================================================================
+  Mistral Large 4 is up on bun161 (mi355x) after 490s.
+
+  Recipe:      arch=mi355x engine=day0 weights=mxfp4 tp=4 replicas=2 mono=1 spec=dspark(3) kv=fp8 ctx=262144 max-seqs=16 gateway=litellm
+  Endpoint:    http://bun161:8000/v1   (LiteLLM -> vLLM)
+  Model name:  mistral-large-4
+  API key:     LiteLLM master key in /scratch/user/uqjcarr1/models/mistral-large-4/ml4-litellm-key
+               export ML4_API_KEY="$(cat /scratch/user/uqjcarr1/models/mistral-large-4/ml4-litellm-key)"
+
+  Thinking:    "reasoning_effort": "low" | "medium" | "high" (default high).
+               Sampling: temperature 1.0, top_p 0.95 (generation_config.json).
+  Verify:      ./serve-ml4.sh toolcheck      ./serve-ml4.sh vibecheck
+  Laptop:      ssh -N -L 8000:bun161:8000 ${USER}@bunya.rcc.uq.edu.au
+               ./vibe-setup.sh --via litellm --host localhost --port 8000 --api-key "$ML4_API_KEY"
+
+  Second shell: srun --overlap --jobid 32640091 --pty /bin/bash -l
+  Stop:        Ctrl-C, 'scancel 32640091', or './serve-ml4.sh stop'
+============================================================================
+
+[1;34m[ml4][0m Detached. Processes keep running until './serve-ml4.sh stop' or the job ends.
+exit 0

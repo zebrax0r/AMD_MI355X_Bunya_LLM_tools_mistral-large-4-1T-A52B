@@ -1,0 +1,20 @@
+[1;34m[ml4][0m Loaded config from /scratch/user/uqjcarr1/builds/AMD_MI355X_Bunya_LLM_tools_mistral-large-4-1T-A52B/ml4.env
+Endpoint http://127.0.0.1:8000  model mistral-large-4  effort low  (non-streaming)
+
+Turn 1 — does the model emit a tool call?
+  [PASS] reasoning separated from content  — 144 chars
+  [PASS] no raw [THINK] markers in content
+  [PASS] model returned tool_calls  — finish_reason=tool_calls, 2.3s
+  [PASS] correct function name  — 'get_gpu_temperature'
+  [PASS] arguments are valid JSON  — '{"node": "bun161"}'
+  [PASS] argument value carried through  — 'bun161'
+  [PASS] tool_call has an id  — '7YnyrJggJ'
+
+Turn 2 — does the model use the tool result (full assistant message replayed)?
+  [PASS] final answer has content  — finish_reason=stop
+  [PASS] final answer contains the tool's value (61.4)
+
+  final answer: The current GPU temperature on bun161 is **61.4°C**.
+  usage turn 2: {'completion_tokens': 38, 'prompt_tokens': 184, 'total_tokens': 222, 'completion_tokens_details': {'reasoning_tokens': 21}, 'prompt_tokens_details': {'cached_tokens': 112, 'created_cache_tokens': 64}}
+
+TOOL-CALL ROUND TRIP OK.

@@ -1,0 +1,14 @@
+=== concurrency 4, 1024 in / 512 out, n=64, effort low
+============ Serving Benchmark Result ============
+Failed requests:                         0         
+Output token throughput (tok/s):         234.58    
+Median TTFT (ms):                        442.92    
+Median TPOT (ms):                        15.02     
+==================================================
+=== concurrency 16, 1024 in / 512 out, n=64, effort low
+============ Serving Benchmark Result ============
+Failed requests:                         0         
+Output token throughput (tok/s):         615.28    
+Median TTFT (ms):                        1754.09   
+Median TPOT (ms):                        20.68     
+==================================================

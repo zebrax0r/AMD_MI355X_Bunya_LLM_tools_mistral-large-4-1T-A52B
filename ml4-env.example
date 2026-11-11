@@ -1,0 +1,79 @@
+# Configuration for serve-ml4.sh (Mistral Large 4 on Bunya MI355X / MI300X).
+#
+#   cp -n ml4-env.example ml4.env && chmod 600 ml4.env
+#
+# Every value uses ${VAR:-default}, so anything exported in your shell (or an
+# sbatch --export) wins. Most users change nothing here and pick the run shape
+# on the command line, e.g.:
+#
+#   GATEWAY=litellm ./serve-ml4.sh serve --detach
+#   GPU_ARCH=mi300x ./serve-ml4.sh plan
+#
+# EMPTY engine knobs mean "the profile's value" — see './serve-ml4.sh plan'
+# and docs/configuration.md.
+
+# ── Where your per-user state lives ─────────────────────────────────────────
+# .sif images, vLLM/Triton/aiter caches, API keys, logs, PID file. /scratch,
+# never /home. Weights are NOT here: they live in the shared store below.
+export STATE_DIR="${STATE_DIR:-/scratch/user/$USER/models/mistral-large-4}"
+export HF_TOKEN_FILE="${HF_TOKEN_FILE:-}"             # only needed for 'download'
+
+# ── Shared weights (read-only for most users) ───────────────────────────────
+# FP8 (official, 1.06 TB): MI300X and MI355X.  MXFP4 (AMD Quark, 539 GB): MI355X.
+export FP8_PATH="${FP8_PATH:-/scratch/opendata/models/gguf/mistral-large-4}"
+export MXFP4_PATH="${MXFP4_PATH:-/scratch/opendata/models/huggingface/amd-Mistral-Large-4-1T-A52B-Quark-MXFP4}"
+
+# ── Run shape (chosen at launch) ────────────────────────────────────────────
+export GPU_ARCH="${GPU_ARCH:-auto}"       # auto | mi355x | mi300x   (auto: read from the GPUs)
+export WEIGHTS="${WEIGHTS:-auto}"         # auto | mxfp4 | fp8       (auto: mi355x->mxfp4, mi300x->fp8)
+export GATEWAY="${GATEWAY:-direct}"       # direct | litellm
+export AGENTS="${AGENTS:-4}"              # concurrent agent sessions you plan to run
+export PROFILE="${PROFILE:-auto}"         # auto | tp4 | tp8
+export REPLICAS="${REPLICAS:-auto}"       # auto | 1 | 2   (2 x TP4 needs GATEWAY=litellm)
+export SPECULATIVE="${SPECULATIVE-dspark}" # dspark | none  (the checkpoint's own draft head)
+export MONOKERNEL="${MONOKERNEL:-auto}"   # auto | 0 | 1   (AMD specialized decode; TP4 + MXFP4 + gfx950)
+
+# ── Endpoint ────────────────────────────────────────────────────────────────
+export PORT="${PORT:-8000}"               # the port clients use (vLLM in direct mode, LiteLLM in litellm mode)
+export BACKEND_PORT_BASE="${BACKEND_PORT_BASE:-8100}"  # vLLM replicas in litellm mode: 8101, 8102 on 127.0.0.1
+export SERVED_MODEL_NAME="${SERVED_MODEL_NAME:-mistral-large-4}"
+export ML4_API_KEY="${ML4_API_KEY:-}"     # empty: generated once into $STATE_DIR/ml4-api-key
+export LITELLM_MASTER_KEY="${LITELLM_MASTER_KEY:-}"   # empty: generated once into $STATE_DIR/ml4-litellm-key
+export LITELLM_ROUTING="${LITELLM_ROUTING:-least-busy}"
+export LITELLM_WORKERS="${LITELLM_WORKERS:-4}"
+export LITELLM_AFFINITY="${LITELLM_AFFINITY:-1}"     # same conversation -> same replica (keeps its prefix cache)
+
+# ── Engine overrides (empty = profile value) ────────────────────────────────
+export CONTEXT_LEN="${CONTEXT_LEN:-}"                 # 262144; the model supports 1048576
+export MAX_NUM_SEQS="${MAX_NUM_SEQS:-}"
+export MAX_BATCHED_TOKENS="${MAX_BATCHED_TOKENS:-}"
+export MEM_UTIL="${MEM_UTIL:-}"
+export KV_CACHE_DTYPE="${KV_CACHE_DTYPE:-}"           # fp8 on mi355x; auto (bf16) on mi300x
+export TOOL_PARSER="${TOOL_PARSER:-mistral}"
+export REASONING_PARSER="${REASONING_PARSER:-mistral}"
+export ENABLE_AITER="${ENABLE_AITER:-1}"
+export WEIGHT_LOAD_THREADS="${WEIGHT_LOAD_THREADS:-16}"
+export PREWARM="${PREWARM:-0}"                        # 1: read shards in parallel first (useless on Bunya GPFS: ~30 GB/s, 64 GB pagepool)
+export PREWARM_THREADS="${PREWARM_THREADS:-32}"
+
+# ── Image pins (change only deliberately; see docs/compatibility.md) ────────
+# ENGINE: day0   = vllm/vllm-openai-rocm:mistral-large-4 (29 Oct; gfx950 kernels only)
+#         branch = vLLM ROCm nightly 83c078d9 (gfx942+gfx950) + the ML4 branch's
+#                  Python at BRANCH_SHA, prepared once into $STATE_DIR
+#         auto   = day0 on MI355X, branch on MI300X
+export ENGINE="${ENGINE:-auto}"
+export BRANCH_REPO="${BRANCH_REPO:-NickLucche/vllm}"
+export BRANCH_SHA="${BRANCH_SHA:-28a4495de85c64050b3aad39e946d02791710579}"
+export ENGINE_IMAGE="${ENGINE_IMAGE:-}"   # empty: the pinned image for ENGINE
+export LITELLM_IMAGE="${LITELLM_IMAGE:-}" # empty: the pinned litellm/litellm v1.108.5-lts digest
+export SIF_PATH="${SIF_PATH:-}"           # default $STATE_DIR/vllm-<engine>-<digest>.sif
+export LITELLM_SIF="${LITELLM_SIF:-}"     # default $STATE_DIR/litellm-<digest>.sif
+
+# ── ROCm / container plumbing (from the Kimi K3 / K3.1 repos) ───────────────
+export ROCM_MODE="${ROCM_MODE:-auto}"     # auto | rocm | devices
+export ROCMINFO_SHIM="${ROCMINFO_SHIM:-auto}"
+export READY_TIMEOUT="${READY_TIMEOUT:-7200}"
+
+# ── Escape hatches ──────────────────────────────────────────────────────────
+export EXTRA_ENGINE_ARGS="${EXTRA_ENGINE_ARGS:-}"     # appended to 'vllm serve'
+export EXTRA_ENV="${EXTRA_ENV:-}"                     # space-separated NAME=VALUE into the vLLM container

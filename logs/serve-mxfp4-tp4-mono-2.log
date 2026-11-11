@@ -1,0 +1,11 @@
+[1;34m[ml4][0m Loaded config from /scratch/user/uqjcarr1/builds/AMD_MI355X_Bunya_LLM_tools_mistral-large-4-1T-A52B/ml4.env
+[1;34m[ml4][0m Weights: mxfp4 — /scratch/opendata/models/huggingface/amd-Mistral-Large-4-1T-A52B-Quark-MXFP4
+[1;34m[ml4][0m GPUs: 8 x gfx950 (detected gfx950); ROCm node 10.1.0 / container torch 2.13.0+rocm10.0.0 HIP 7.15.26333
+[1;33m[ml4 WARN][0m 4 of 8 allocated GPUs will sit idle with this recipe (TP4 x 1).
+  Allocate --gres=gpu:mi355x:4 next time, or GATEWAY=litellm to run 2 x TP4 replicas.
+[1;34m[ml4][0m Recipe: arch=mi355x weights=mxfp4 tp=4 replicas=1 mono=1 spec=dspark(3) kv=fp8 ctx=262144 max-seqs=16 gateway=direct
+[1;34m[ml4][0m GPU passthrough: rocm (remembered for this node + image)
+[1;34m[ml4][0m Replica 0: GPUs 0,1,2,3 -> 0.0.0.0:8000   log: /scratch/user/uqjcarr1/models/mistral-large-4/logs/ml4-r0.log
+[1;34m[ml4][0m Waiting for the engine(s) (timeout 7200s). Cold start: weights, aiter/FlyDSL JIT, graph capture.
+[1;34m[ml4][0m Replica 0 healthy after 631s.
+exit 137

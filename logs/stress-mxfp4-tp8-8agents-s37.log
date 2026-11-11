@@ -1,0 +1,7 @@
+agentstress: model=mistral-large-4 effort=low max_ctx~80000 turn~20000
+turn  1 ~ 20k  ttft  10.3s total  18.6s   252 tok  30.4 tok/s cached 16/21027  ok  reply='Deployment ticket: **815133-amber**.\n\nOn'
+turn  2 ~ 40k  ttft   3.5s total  15.1s   197 tok  16.9 tok/s cached 21024/42522  ok  reply='Deployment ticket: **129141-violet**.\n\nO'
+turn  3 ~ 60k  ttft   6.9s total   9.1s   187 tok  84.2 tok/s cached 42512/65301  ok  reply='Deployment ticket: **787360-saffron**.\n\n'
+turn  4 ~ 80k  ttft   4.8s total  10.9s   228 tok  37.1 tok/s cached 65296/88722  ok  reply='Deployment ticket: **678644-saffron**.\n\n'
+decode tok/s, context 0-60k: mean 43.8
+decode tok/s, context 60-80k: mean 37.1

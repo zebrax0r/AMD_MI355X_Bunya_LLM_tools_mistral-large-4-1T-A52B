@@ -1,0 +1,56 @@
+=== concurrency 1, 1024 in / 512 out, n=32, effort low
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Failed requests:                         0         
+Output token throughput (tok/s):         83.19     
+Total token throughput (tok/s):          289.13    
+Mean TTFT (ms):                          547.21    
+Median TTFT (ms):                        384.76    
+Mean TPOT (ms):                          10.99     
+Median TPOT (ms):                        10.86     
+Mean ITL (ms):                           83.42     
+Per-position acceptance (%):
+==================================================
+=== concurrency 2, 1024 in / 512 out, n=32, effort low
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Failed requests:                         0         
+Output token throughput (tok/s):         135.80    
+Total token throughput (tok/s):          438.15    
+Mean TTFT (ms):                          434.92    
+Median TTFT (ms):                        401.02    
+Mean TPOT (ms):                          13.21     
+Median TPOT (ms):                        13.58     
+Mean ITL (ms):                           112.05    
+Per-position acceptance (%):
+==================================================
+=== concurrency 4, 1024 in / 512 out, n=32, effort low
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Failed requests:                         0         
+Output token throughput (tok/s):         221.67    
+Total token throughput (tok/s):          682.78    
+Mean TTFT (ms):                          544.63    
+Median TTFT (ms):                        425.75    
+Mean TPOT (ms):                          16.38     
+Median TPOT (ms):                        16.56     
+Mean ITL (ms):                           177.03    
+Per-position acceptance (%):
+==================================================
+=== concurrency 8, 1024 in / 512 out, n=32, effort low
+============ Serving Benchmark Result ============
+Successful requests:                     32        
+Failed requests:                         0         
+Output token throughput (tok/s):         314.11    
+Total token throughput (tok/s):          1066.00   
+Mean TTFT (ms):                          871.09    
+Median TTFT (ms):                        624.81    
+Mean TPOT (ms):                          20.25     
+Median TPOT (ms):                        21.24     
+Mean ITL (ms):                           188.39    
+Per-position acceptance (%):
+==================================================
+Server-side DSpark acceptance (random prompts overstate it):
+Mean acceptance length: 1.27
+Mean acceptance length: 1.22
+Mean acceptance length: 1.06
